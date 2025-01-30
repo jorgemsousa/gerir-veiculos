@@ -9,6 +9,16 @@ public class Veiculo {
     private String cor;
     private Tipo tipo;
 
+    public Veiculo(int id, String modelo, String fabricante, int ano, double preco, String cor, String tipo) {
+        this.id = id;
+        this.modelo = modelo;
+        this.fabricante = fabricante;
+        this.ano = ano;
+        this.preco = preco;
+        this.cor = cor;
+        this.tipo = Tipo.valueOf(tipo);
+    }
+
     public int getAno() {
         return ano;
     }
