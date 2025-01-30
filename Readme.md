@@ -203,6 +203,9 @@ mvn spring-boot:run
 
 A API estará rodando em `http://localhost:8080/api/veiculos` 🚀
 
+### 4️⃣ Eecutar o Front
+O Front estará rodando em `http://localhost:8080/index.html` 🚀
+
 ---
 
 ## 📌 **Conclusão**
