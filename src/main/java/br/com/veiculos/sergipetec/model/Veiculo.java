@@ -9,6 +9,11 @@ public class Veiculo {
     private String cor;
     private Tipo tipo;
 
+    private Integer quantidadePortas;
+    private Combustivel tipoCombustivel;
+
+    private Integer cilindrada;
+
     public Veiculo(int id, String modelo, String fabricante, int ano, double preco, String cor, String tipo) {
         this.id = id;
         this.modelo = modelo;
@@ -74,4 +79,13 @@ public class Veiculo {
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
+
+    public Integer getQuantidadePortas() { return quantidadePortas; }
+    public void setQuantidadePortas(Integer quantidadePortas) { this.quantidadePortas = quantidadePortas; }
+
+    public Combustivel getTipoCombustivel() { return tipoCombustivel; }
+    public void setTipoCombustivel(Combustivel tipoCombustivel) { this.tipoCombustivel = tipoCombustivel; }
+
+    public Integer getCilindrada() { return cilindrada; }
+    public void setCilindrada(Integer cilindrada) { this.cilindrada = cilindrada; }
 }
