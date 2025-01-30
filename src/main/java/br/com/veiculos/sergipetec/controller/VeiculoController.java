@@ -37,4 +37,9 @@ public class VeiculoController {
     public ResponseEntity<String> addVeiculo(@RequestBody Veiculo veiculo) {
         return veiculoService.adicionarVeiculo(veiculo);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable int id, @RequestBody Veiculo veiculo) {
+        return veiculoService.atualizarVeiculo(id, veiculo);
+    }
 }

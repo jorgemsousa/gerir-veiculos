@@ -8,6 +8,7 @@ import br.com.veiculos.sergipetec.model.Veiculo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,6 +177,55 @@ public class VeiculoRepository {
 
         return veiculos;
     }
+
+    //metodo de atualização
+    public boolean atualizarVeiculo(Veiculo veiculo) {
+        String sql = "UPDATE veiculos SET modelo = ?, fabricante = ?, ano = ?, preco = ?, cor = ?, tipo = ? WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, veiculo.getModelo());
+            stmt.setString(2, veiculo.getFabricante());
+            stmt.setInt(3, veiculo.getAno());
+            stmt.setDouble(4, veiculo.getPreco());
+            stmt.setString(5, veiculo.getCor());
+            stmt.setString(6, veiculo.getTipo().toString().toLowerCase());
+            stmt.setInt(7, veiculo.getId());
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                if ("carro".equalsIgnoreCase(veiculo.getTipo().toString())) {
+                    return atualizarCarro(conn, veiculo);
+                } else if ("moto".equalsIgnoreCase(veiculo.getTipo().toString())) {
+                    return atualizarMoto(conn, veiculo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean atualizarCarro(Connection conn, Veiculo veiculo) throws SQLException {
+        String sql = "UPDATE carros SET quantidade_portas = ?, tipo_combustivel = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, veiculo.getQuantidadePortas());
+            stmt.setString(2, veiculo.getTipoCombustivel().toString().toLowerCase());
+            stmt.setInt(3, veiculo.getId());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    private boolean atualizarMoto(Connection conn, Veiculo veiculo) throws SQLException {
+        String sql = "UPDATE motos SET cilindrada = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, veiculo.getCilindrada());
+            stmt.setInt(2, veiculo.getId());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
 
 
     private void addCarroDetails(Connection conn, Veiculo veiculo) {

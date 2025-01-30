@@ -52,4 +52,15 @@ public class VeiculoService {
                 ResponseEntity.badRequest().body("Erro ao cadastrar veículo.");
 
     }
+
+    public ResponseEntity<String> atualizarVeiculo(int id, Veiculo veiculo) {
+        veiculo.setId(id);
+        boolean atualizado = veiculoRepository.atualizarVeiculo(veiculo);
+
+        if (atualizado) {
+            return ResponseEntity.ok("Veículo atualizado com sucesso!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veículo não encontrado ou erro ao atualizar.");
+        }
+    }
 }
