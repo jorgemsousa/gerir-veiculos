@@ -207,6 +207,54 @@ public class VeiculoRepository {
         return false;
     }
 
+    //metodo para deltar
+    public boolean deletarVeiculo(int id) {
+        String selectTipoSql = "SELECT tipo FROM veiculos WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement selectStmt = conn.prepareStatement(selectTipoSql)) {
+
+            selectStmt.setInt(1, id);
+            ResultSet rs = selectStmt.executeQuery();
+
+            if (rs.next()) {
+                String tipo = rs.getString("tipo");
+
+                if ("carro".equalsIgnoreCase(tipo)) {
+                    deletarCarro(conn, id);
+                } else if ("moto".equalsIgnoreCase(tipo)) {
+                    deletarMoto(conn, id);
+                }
+
+                String deleteVeiculoSql = "DELETE FROM veiculos WHERE id = ?";
+                try (PreparedStatement deleteStmt = conn.prepareStatement(deleteVeiculoSql)) {
+                    deleteStmt.setInt(1, id);
+                    return deleteStmt.executeUpdate() > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    private void deletarCarro(Connection conn, int id) throws SQLException {
+        String sql = "DELETE FROM carros WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
+
+    private void deletarMoto(Connection conn, int id) throws SQLException {
+        String sql = "DELETE FROM motos WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
+
     private boolean atualizarCarro(Connection conn, Veiculo veiculo) throws SQLException {
         String sql = "UPDATE carros SET quantidade_portas = ?, tipo_combustivel = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -225,8 +273,6 @@ public class VeiculoRepository {
             return stmt.executeUpdate() > 0;
         }
     }
-
-
 
     private void addCarroDetails(Connection conn, Veiculo veiculo) {
         String sql = "SELECT quantidade_portas, tipo_combustivel FROM carros WHERE id = ?";

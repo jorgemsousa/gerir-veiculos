@@ -2,6 +2,7 @@ package br.com.veiculos.sergipetec.controller;
 
 import br.com.veiculos.sergipetec.model.Veiculo;
 import br.com.veiculos.sergipetec.service.VeiculoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +42,10 @@ public class VeiculoController {
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable int id, @RequestBody Veiculo veiculo) {
         return veiculoService.atualizarVeiculo(id, veiculo);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarVeiculo(@PathVariable int id) {
+        return veiculoService.deletarVeiculo(id);
     }
 }

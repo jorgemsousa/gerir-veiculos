@@ -63,4 +63,14 @@ public class VeiculoService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veículo não encontrado ou erro ao atualizar.");
         }
     }
+
+    public ResponseEntity<String> deletarVeiculo(int id) {
+        boolean deletado = veiculoRepository.deletarVeiculo(id);
+
+        if (deletado) {
+            return ResponseEntity.ok("Veículo deletado com sucesso!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veículo não encontrado.");
+        }
+    }
 }
