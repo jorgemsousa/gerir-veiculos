@@ -113,6 +113,70 @@ public class VeiculoRepository {
         return veiculo;
     }
 
+    //buscar por filtros
+    public List<Veiculo> getVeiculosComFiltro(String tipo, String cor, String modelo, Integer ano) {
+        List<Veiculo> veiculos = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM veiculos WHERE 1=1");
+
+        if (tipo != null && !tipo.isEmpty()) {
+            sql.append(" AND tipo = ?");
+        }
+        if (cor != null && !cor.isEmpty()) {
+            sql.append(" AND cor = ?");
+        }
+        if (modelo != null && !modelo.isEmpty()) {
+            sql.append(" AND modelo ILIKE ?");
+        }
+        if (ano != null) {
+            sql.append(" AND ano = ?");
+        }
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            int index = 1;
+            if (tipo != null && !tipo.isEmpty()) {
+                stmt.setString(index++, tipo);
+            }
+            if (cor != null && !cor.isEmpty()) {
+                stmt.setString(index++, cor);
+            }
+            if (modelo != null && !modelo.isEmpty()) {
+                stmt.setString(index++, "%" + modelo + "%");
+            }
+            if (ano != null) {
+                stmt.setInt(index++, ano);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Veiculo veiculo = new Veiculo(
+                            rs.getInt("id"),
+                            rs.getString("modelo"),
+                            rs.getString("fabricante"),
+                            rs.getInt("ano"),
+                            rs.getDouble("preco"),
+                            rs.getString("cor"),
+                            rs.getString("tipo").toUpperCase()
+                    );
+
+                    // Adicionar detalhes específicos
+                    if ("carro".equalsIgnoreCase(veiculo.getTipo().toString())) {
+                        addCarroDetails(conn, veiculo);
+                    } else if ("moto".equalsIgnoreCase(veiculo.getTipo().toString())) {
+                        addMotoDetails(conn, veiculo);
+                    }
+
+                    veiculos.add(veiculo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return veiculos;
+    }
+
 
     private void addCarroDetails(Connection conn, Veiculo veiculo) {
         String sql = "SELECT quantidade_portas, tipo_combustivel FROM carros WHERE id = ?";

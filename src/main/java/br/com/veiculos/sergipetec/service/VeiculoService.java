@@ -23,6 +23,21 @@ public class VeiculoService {
         return ResponseEntity.ok(veiculo);
     }
 
+    public ResponseEntity<List<Veiculo>> getVeiculosComFiltro(
+           String tipo,
+           String cor,
+           String modelo,
+           Integer ano) {
+
+        List<Veiculo> veiculos = veiculoRepository.getVeiculosComFiltro(tipo, cor, modelo, ano);
+
+        if (veiculos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(veiculos);
+        }
+
+        return ResponseEntity.ok(veiculos);
+    }
+
     public ResponseEntity<String> adicionarVeiculo(Veiculo veiculo) {
         if ("carro".equalsIgnoreCase(veiculo.getTipo().toString()) && (veiculo.getQuantidadePortas() == null || veiculo.getTipoCombustivel() == null)) {
             return ResponseEntity.badRequest().body("Carros precisam de quantidadePortas e tipoCombustivel.");

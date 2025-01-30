@@ -23,6 +23,16 @@ public class VeiculoController {
        return veiculoService.getVeiculoById(id);
     }
 
+    @GetMapping("/filtro")
+    public ResponseEntity<List<Veiculo>> getByFilter(
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false) String cor,
+            @RequestParam(required = false) String modelo,
+            @RequestParam(required = false) Integer ano
+    ) {
+        return veiculoService.getVeiculosComFiltro(tipo, cor, modelo, ano);
+    }
+
     @PostMapping
     public ResponseEntity<String> addVeiculo(@RequestBody Veiculo veiculo) {
         return veiculoService.adicionarVeiculo(veiculo);
