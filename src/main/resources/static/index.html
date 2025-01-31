@@ -8,8 +8,191 @@
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold text-center mb-4">Gestão de Veículos</h1>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="buscarVeiculos()">Listar Veículos</button>
-        <ul id="lista-veiculos" class="mt-4 space-y-2"></ul>
+        <div class="mt-6 row">
+            <div class="flex items-center justify-between mb-4 mt-4">
+                <div class="ml-4">
+                    <button onclick="buscarTodosVeiculos()"
+                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Listar Todos
+                    </button>
+                </div>
+
+                <div class="flex items-center">
+                    <select id="filtroTipo" class="border p-2 rounded">
+                        <option value="todos">Todos</option>
+                        <option value="cor">Cor</option>
+                        <option value="modelo">Modelo</option>
+                        <option value="fabricante">Fabricante</option>
+                        <option value="ano">Ano</option>
+                    </select>
+
+                    <input id="filtroValor" type="text" class="border p-2 w-48 rounded ml-4" placeholder="Digite o valor">
+
+                    <button onclick="buscarPorFiltro()" class="bg-blue-500 text-white px-4 py-2 rounded ml-4 hover:bg-blue-700">
+                        Buscar
+                    </button>
+
+                    <button onclick="abrirModal()" class="bg-green-500 text-white px-4 py-2 rounded ml-4 hover:bg-green-700">
+                        Adicionar Veículo
+                    </button>
+                </div>
+            </div>
+
+
+            <table class="table-auto w-full border-collapse border border-gray-300 mt-4">
+                <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Modelo</th>
+                    <th class="border border-gray-300 px-4 py-2">Fabricante</th>
+                    <th class="border border-gray-300 px-4 py-2">Ano</th>
+                    <th class="border border-gray-300 px-4 py-2">Ações</th>
+                </tr>
+                </thead>
+                <tbody id="tabela-veiculos"></tbody>
+            </table>
+        </div>
     </div>
+
+    <div id="resultado-veiculo" class="mt-4 text-gray-700"></div>
+
+    <div id="modal-editar" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2 max-w-lg">
+            <h2 class="text-xl font-bold mb-4 text-center">Editar Veículo</h2>
+
+            <input type="hidden" id="editar-id">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold">Modelo</label>
+                    <input type="text" id="editar-modelo" class="border p-2 w-full rounded" placeholder="Modelo">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold">Fabricante</label>
+                    <input type="text" id="editar-fabricante" class="border p-2 w-full rounded" placeholder="Fabricante">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold">Ano</label>
+                    <input type="number" id="editar-ano" class="border p-2 w-full rounded" placeholder="Ano">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold">Preço</label>
+                    <input type="number" id="editar-preco" class="border p-2 w-full rounded" placeholder="Preço">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold">Cor</label>
+                    <input type="text" id="editar-cor" class="border p-2 w-full rounded" placeholder="Cor">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold">Tipo</label>
+                    <input type="text" id="editar-tipo" class="border p-2 w-full rounded" placeholder="Carro/Moto">
+                </div>
+            </div>
+
+            <div id="carro-campos" class="hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-semibold">Quantidade de Portas</label>
+                        <input type="number" id="editar-quantidadePortas" class="border p-2 w-full rounded" placeholder="Portas">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold">Tipo de Combustível</label>
+                        <input type="text" id="editar-tipoCombustivel" class="border p-2 w-full rounded" placeholder="Combustível">
+                    </div>
+                </div>
+            </div>
+
+            <div id="moto-campos" class="hidden">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold">Cilindrada</label>
+                    <input type="number" id="editar-cilindrada" class="border p-2 w-full rounded" placeholder="Cilindrada">
+                </div>
+            </div>
+
+            <div class="flex space-x-4 mt-6">
+                <button onclick="salvarEdicao()" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-700 w-full sm:w-auto">
+                    Salvar
+                </button>
+                <button onclick="fecharModal()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-700 w-full sm:w-auto">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modal-detalhes" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2 max-w-lg">
+            <h2 class="text-xl font-bold mb-4 text-center">Detalhes do Veículo</h2>
+            <div id="detalhes-veiculo"></div>
+            <div class="flex justify-center mt-6">
+                <button onclick="fecharModalDetalhes()" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-700 w-full sm:w-auto">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-veiculo" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg w-96 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-lg font-bold mb-4 text-center">Adicionar Veículo</h2>
+
+            <label class="block mb-2">Tipo</label>
+            <select id="tipo" onchange="alterarCampos()" class="border p-2 w-full">
+                <option value="">Selecione</option>
+                <option value="CARRO">Carro</option>
+                <option value="MOTO">Moto</option>
+            </select>
+
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block mt-2">Modelo</label>
+                    <input type="text" id="modelo" class="border p-2 w-full" />
+                </div>
+
+                <div>
+                    <label class="block mt-2">Fabricante</label>
+                    <input type="text" id="fabricante" class="border p-2 w-full" />
+                </div>
+
+                <div>
+                    <label class="block mt-2">Ano</label>
+                    <input type="number" id="ano" class="border p-2 w-full" />
+                </div>
+
+                <div>
+                    <label class="block mt-2">Preço</label>
+                    <input type="number" id="preco" class="border p-2 w-full" />
+                </div>
+
+                <div>
+                    <label class="block mt-2">Cor</label>
+                    <input type="text" id="cor" class="border p-2 w-full" />
+                </div>
+            </div>
+
+            <!-- Campos dinâmicos -->
+            <div id="campos-dinamicos" class="mt-2"></div>
+
+            <div class="flex justify-end mt-4 space-x-2">
+                <button onclick="fecharModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">
+                    Cancelar
+                </button>
+                <button onclick="adicionarVeiculo()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="js/scripts.js"></script>
 </body>
 </html>
