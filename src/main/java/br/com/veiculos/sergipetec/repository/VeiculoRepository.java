@@ -172,11 +172,19 @@ public class VeiculoRepository {
                 }
             }
         } catch (Exception e) {
+            System.err.println("Erro ao buscar veículos: " + e.getMessage());
             e.printStackTrace();
+        }
+
+        // Verifica se nenhum veículo foi encontrado e adiciona uma mensagem fictícia
+        if (veiculos.isEmpty()) {
+            System.out.println("Nenhum veículo encontrado para os filtros aplicados.");
+            return new ArrayList<>(); // Retorna uma lista vazia
         }
 
         return veiculos;
     }
+
 
     //metodo de atualização
     public boolean atualizarVeiculo(Veiculo veiculo) {

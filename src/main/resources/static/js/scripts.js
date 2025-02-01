@@ -31,49 +31,6 @@ async function buscarVeiculoPorId() {
         alert(error.message);
     }
 }
-async function buscarTodosVeiculos() {
-    try {
-        const response = await fetch('/api/veiculos');
-        if (!response.ok) {
-            throw new Error("Erro ao buscar veículos.");
-        }
-        const veiculos = await response.json();
-        const tabela = document.getElementById('tabela-veiculos');
-        tabela.innerHTML = '';
-
-        if (veiculos.length === 0) {
-            tabela.innerHTML = '<tr><td colspan="5" class="text-center p-2">Nenhum veículo encontrado.</td></tr>';
-            return;
-        }
-
-        veiculos.forEach(veiculo => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="border border-gray-300 px-4 py-2 text-center">${veiculo.id}</td>
-                <td class="border border-gray-300 px-4 py-2 text-center">${veiculo.modelo}</td>
-                <td class="border border-gray-300 px-4 py-2 text-center">${veiculo.fabricante}</td>
-                <td class="border border-gray-300 px-4 py-2 text-center">${veiculo.ano}</td>
-                <td class="border border-gray-300 px-4 py-2 text-center">
-                    <button onclick="verDetalhes(${veiculo.id})"
-                            class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700">
-                        Detalhes
-                    </button>
-                    <button onclick="editarVeiculo(${veiculo.id})"
-                            class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-700">
-                        Editar
-                    </button>
-                    <button onclick="deletarVeiculo(${veiculo.id})"
-                            class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700">
-                        Deletar
-                    </button>
-                </td>
-            `;
-            tabela.appendChild(row);
-        });
-    } catch (error) {
-        alert(error.message);
-    }
-}
 
 async function verDetalhes(id) {
     const response = await fetch(`/api/veiculos/${id}`);
@@ -109,17 +66,19 @@ async function verDetalhes(id) {
         ${detalhesAdicionais}
     `;
 
-    modalDetalhes.classList.remove('hidden');
+    // Mostra o modal ao adicionar a classe 'active'
+    modalDetalhes.classList.add('active');
 }
 
-
-
+// Função para fechar o modal
 function fecharModalDetalhes() {
-    document.getElementById('modal-detalhes').classList.add('hidden');
+    const modalDetalhes = document.getElementById('modal-detalhes');
+    modalDetalhes.classList.remove('active');
 }
 
 async function editarVeiculo(id) {
     try {
+
         const response = await fetch(`/api/veiculos/${id}`);
         if (!response.ok) throw new Error("Veículo não encontrado.");
 
@@ -134,7 +93,6 @@ async function editarVeiculo(id) {
         document.getElementById('editar-cor').value = veiculo.cor;
         document.getElementById('editar-tipo').value = veiculo.tipo;
 
-
         if (veiculo.tipo.toLowerCase() === "carro") {
             document.getElementById('carro-campos').classList.remove('hidden');
             document.getElementById('moto-campos').classList.add('hidden');
@@ -146,15 +104,13 @@ async function editarVeiculo(id) {
             document.getElementById('editar-cilindrada').value = veiculo.cilindrada || "";
         }
 
-        document.getElementById('modal-editar').classList.remove('hidden');
+        // Adicionando a classe show para exibir o modal
+        const modal = document.getElementById('modal-editar');
+        modal.classList.add('active');
+
     } catch (error) {
         alert(error.message);
     }
-}
-
-
-function fecharModal() {
-    document.getElementById('modal-editar').classList.add('hidden');
 }
 
 async function salvarEdicao() {
@@ -198,7 +154,7 @@ async function deletarVeiculo(id) {
         const response = await fetch(`/api/veiculos/${id}`, { method: "DELETE" });
         if (!response.ok) throw new Error("Erro ao deletar veículo.");
 
-        buscarTodosVeiculos();
+        listaVeiculos();
     } catch (error) {
         alert(error.message);
     }
@@ -259,21 +215,38 @@ function alterarCampos() {
     const tipo = document.getElementById("tipo").value;
     const camposDinamicos = document.getElementById("campos-dinamicos");
 
-    camposDinamicos.innerHTML = ""; // Limpa os campos anteriores
+    // Limpa os campos dinâmicos antes de adicionar novos
+    camposDinamicos.innerHTML = "";
 
-    if (tipo === "CARRO") {
-        camposDinamicos.innerHTML = `
+    if (tipo.toUpperCase() === "CARRO") {
+        // Campo para quantidade de portas
+        let quantidadePortasField = document.createElement("div");
+        quantidadePortasField.innerHTML = `
             <label class="block mt-2">Quantidade de Portas</label>
             <input type="number" id="quantidadePortas" class="border p-2 w-full" />
-
-            <label class="block mt-2">Tipo de Combustível</label>
-            <input type="text" id="tipoCombustivel" class="border p-2 w-full" />
         `;
-    } else if (tipo === "MOTO") {
-        camposDinamicos.innerHTML = `
+        camposDinamicos.appendChild(quantidadePortasField);
+
+        // Campo para tipo de combustível
+        let tipoCombustivelField = document.createElement("div");
+        tipoCombustivelField.innerHTML = `
+            <label class="block mt-2">Tipo de Combustível</label>
+            <select id="tipoCombustivel" class="border p-2 w-full">
+                <option value="gasolina">Gasolina</option>
+                <option value="etanol">Etanol</option>
+                <option value="diesel">Diesel</option>
+                <option value="flex">Flex</option>
+            </select>
+        `;
+        camposDinamicos.appendChild(tipoCombustivelField);
+    } else if (tipo.toUpperCase() === "MOTO") {
+        // Campo para cilindrada se for moto
+        let cilindradaField = document.createElement("div");
+        cilindradaField.innerHTML = `
             <label class="block mt-2">Cilindrada</label>
             <input type="number" id="cilindrada" class="border p-2 w-full" />
         `;
+        camposDinamicos.appendChild(cilindradaField);
     }
 }
 
@@ -294,10 +267,13 @@ async function adicionarVeiculo() {
         tipo
     };
 
-    if (tipo === "CARRO") {
+    // Verifica se o tipo de veículo é CARRO e coleta os dados adicionais
+    if (tipo.toUpperCase() === "CARRO") {
         veiculo.quantidadePortas = parseInt(document.getElementById("quantidadePortas").value);
-        veiculo.tipoCombustivel = document.getElementById("tipoCombustivel").value;
-    } else if (tipo === "MOTO") {
+        veiculo.tipoCombustivel = document.getElementById("tipoCombustivel").value; // Adiciona o tipo de combustível
+    }
+    // Verifica se o tipo de veículo é MOTO e coleta a cilindrada
+    else if (tipo.toUpperCase() === "MOTO") {
         veiculo.cilindrada = parseInt(document.getElementById("cilindrada").value);
     }
 
@@ -313,18 +289,109 @@ async function adicionarVeiculo() {
         }
 
         alert('Veículo adicionado com sucesso!');
-        fecharModal();
-        buscarPorFiltro(); // Atualiza a tabela
+        fecharModalVeiculo();
+        buscarTodosVeiculos();
     } catch (error) {
         alert(error.message);
     }
 }
 
-function abrirModal() {
-    document.getElementById("modal-veiculo").classList.remove("hidden");
+function abrirModalVeiculo() {
+    const modal = document.getElementById('modal-veiculo');
+    modal.classList.add('active');
 }
 
-function fecharModal() {
-    document.getElementById("modal-veiculo").classList.add("hidden");
+function fecharModalVeiculo() {
+    const modal = document.getElementById('modal-veiculo');
+        modal.classList.remove('active');
 }
 
+// Função para aplicar o filtro e carregar os veículos filtrados
+function aplicarFiltro() {
+   const tipo = document.getElementById("tipo").value;
+   const cor = document.getElementById("cor").value;
+   const ano = document.getElementById("ano").value;
+   const modelo = document.getElementById("modelo").value;
+   const fabricante = document.getElementById("fabricante").value;
+
+   let params = new URLSearchParams();
+
+   if (tipo) params.append("tipo", tipo.toLowerCase());
+   if (cor) params.append("cor", cor);
+   if (ano) params.append("ano", ano);
+   if (modelo) params.append("modelo", modelo);
+   if (fabricante) params.append("fabricante", fabricante);
+
+   let url = "/api/veiculos/filtro";
+   if (params.toString()) {
+       url += "?" + params.toString();
+   }
+    // Faz a requisição com os filtros aplicados
+    fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro na resposta do servidor");
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tabela = document.getElementById("tabela-veiculos");
+                tabela.innerHTML = ""; // Limpa a tabela antes de adicionar os dados filtrados
+
+                if (data.length === 0) {
+                    tabela.innerHTML = "<tr><td colspan='5'>Nenhum veículo encontrado</td></tr>";
+                    return;
+                }
+
+                data.forEach(veiculo => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${veiculo.id}</td>
+                        <td>${veiculo.modelo}</td>
+                        <td>${veiculo.fabricante}</td>
+                        <td>${veiculo.ano}</td>
+                        <td class="actions">
+                            <i class="fa-solid fa-eye" title="Visualizar"></i>
+                            <i class="fa-solid fa-pen" title="Editar"></i>
+                            <i class="fa-solid fa-trash" title="Deletar"></i>
+                        </td>
+                    `;
+                    tabela.appendChild(row);
+                });
+            })
+            .catch(error => {
+                alert("Nenhum dado encontrado!!!");
+                console.error("Erro ao carregar veículos:", error);
+            });
+}
+
+// Função para carregar todos os veículos inicialmente
+function listaVeiculos() {
+    fetch("/api/veiculos")
+        .then(response => response.json())
+        .then(data => {
+            const tabela = document.getElementById("tabela-veiculos");
+            data.forEach(veiculo => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${veiculo.id}</td>
+                    <td>${veiculo.modelo}</td>
+                    <td>${veiculo.fabricante}</td>
+                    <td>${veiculo.ano}</td>
+                    <td class="actions">
+                        <i class="fa-solid fa-eye" title="Visualizar" onclick="verDetalhes(${veiculo.id})"></i>
+                        <i class="fa-solid fa-pen" title="Editar" onclick="editarVeiculo(${veiculo.id})"></i>
+                        <i class="fa-solid fa-trash" title="Deletar" onclick="deletarVeiculo(${veiculo.id})"></i>
+                    </td>
+                `;
+                tabela.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Erro ao carregar veículos:", error));
+}
+
+// Função para fechar o modal
+function fecharModalEditar() {
+    const modal = document.getElementById('modal-editar');
+    modal.classList.remove('active');
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Veículos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/list.css">
+</head>
+<body>
+<header>
+    <div class="logo">Gerenciamento de Veículos</div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="listagem.html">Veículos</a></li>
+        </ul>
+    </nav>
+</header>
+<div class="container">
+    <h1>Lista de Veículos</h1>
+    <div id="filtro" class="mb-4">
+        <label for="tipoVeiculo">Tipo:</label>
+        <select class="input-filtro" id="tipoVeiculo">
+            <option value="">Todos</option>
+            <option value="CARRO">Carro</option>
+            <option value="MOTO">Moto</option>
+        </select>
+
+        <label for="corVeiculo">Cor:</label>
+        <input type="text" id="corVeiculo" class="input-filtro" placeholder="Cor">
+
+        <label for="anoVeiculo">Ano:</label>
+        <input type="number" id="anoVeiculo" class="input-filtro" placeholder="Ano">
+
+        <label for="modeloVeiculo">Modelo:</label>
+        <input type="text" id="modeloVeiculo" class="input-filtro" placeholder="Modelo">
+
+        <label for="fabricanteVeiculo">Fabricante:</label>
+        <input type="text" id="fabricanteVeiculo" class="input-filtro" placeholder="Fabricante">
+
+        <button onclick="aplicarFiltro()">Filtrar</button>
+
+        <button id="adicionar-veiculo-btn" onclick="abrirModalVeiculo()">Adicionar Veículo</button>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Modelo</th>
+            <th>Fabricante</th>
+            <th>Ano</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody id="tabela-veiculos">
+        <!-- Dados serão inseridos aqui pelo JavaScript -->
+        </tbody>
+    </table>
+</div>
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Endereço</h4>
+            <p>Rua Tupinambá, 45 - PQ dos Carajas I<br>N Sra do Socorro - SE</p>
+        </div>
+        <div class="footer-section">
+            <h4>Redes Sociais</h4>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/profile.php?id=100002918852369"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.instagram.com/jorgesousa9005/"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/jorge-meneses-61199898/"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h4>Contato</h4>
+            <p>Email: jorgeferartsousa@gmail.com<br>Telefone: (79) 99902-9627</p>
+        </div>
+    </div>
+</footer>
+
+<div id="modal-detalhes" class="modal hidden">
+    <div class="modal-content">
+        <h2 class="modal-title">Detalhes do Veículo</h2>
+        <div id="detalhes-veiculo" class="modal-body"></div>
+        <div class="modal-footer">
+            <button onclick="fecharModalDetalhes()" class="btn-close">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-editar" class="modal">
+    <div class="modal-content">
+        <h2>Editar Veículo</h2>
+
+        <input type="hidden" id="editar-id">
+
+        <div class="form-group">
+            <div>
+                <label for="editar-modelo">Modelo</label>
+                <input type="text" id="editar-modelo" placeholder="Modelo">
+            </div>
+            <div>
+                <label for="editar-fabricante">Fabricante</label>
+                <input type="text" id="editar-fabricante" placeholder="Fabricante">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="editar-ano">Ano</label>
+                <input type="number" id="editar-ano" placeholder="Ano">
+            </div>
+            <div>
+                <label for="editar-preco">Preço</label>
+                <input type="number" id="editar-preco" placeholder="Preço">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label for="editar-cor">Cor</label>
+                <input type="text" id="editar-cor" placeholder="Cor">
+            </div>
+            <div>
+                <label for="editar-tipo">Tipo</label>
+                <input type="text" id="editar-tipo" placeholder="Carro/Moto">
+            </div>
+        </div>
+
+        <div id="carro-campos" class="hidden">
+            <div class="form-group">
+                <div>
+                    <label for="editar-quantidadePortas">Quantidade de Portas</label>
+                    <input type="number" id="editar-quantidadePortas" placeholder="Portas">
+                </div>
+                <div>
+                    <label for="editar-tipoCombustivel">Tipo de Combustível</label>
+                    <input type="text" id="editar-tipoCombustivel" placeholder="Combustível">
+                </div>
+            </div>
+        </div>
+
+        <div id="moto-campos" class="hidden">
+            <div>
+                <label for="editar-cilindrada">Cilindrada</label>
+                <input type="number" id="editar-cilindrada" placeholder="Cilindrada">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button onclick="salvarEdicao()">Salvar</button>
+            <button onclick="fecharModalEditar()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-veiculo" class="modal">
+    <div class="modal-content">
+        <h2>Adicionar Veículo</h2>
+
+        <label>Tipo</label>
+        <select id="tipo" onchange="alterarCampos()">
+            <option value="">Selecione</option>
+            <option value="CARRO">Carro</option>
+            <option value="MOTO">Moto</option>
+        </select>
+
+        <div class="grid-container">
+            <div>
+                <label>Modelo</label>
+                <input type="text" id="modelo" />
+            </div>
+
+            <div>
+                <label>Fabricante</label>
+                <input type="text" id="fabricante" />
+            </div>
+
+            <div>
+                <label>Ano</label>
+                <input type="number" id="ano" />
+            </div>
+
+            <div>
+                <label>Preço</label>
+                <input type="number" id="preco" />
+            </div>
+
+            <div>
+                <label>Cor</label>
+                <input type="text" id="cor" />
+            </div>
+        </div>
+
+        <!-- Campos dinâmicos -->
+        <div id="campos-dinamicos"></div>
+
+        <div class="modal-buttons">
+            <button class="cancel" onclick="fecharModalVeiculo()">Cancelar</button>
+            <button class="save" onclick="adicionarVeiculo()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/scripts.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", listaVeiculos);
+</script>
+
+</body>
+</html>
