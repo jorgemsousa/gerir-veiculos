@@ -21,20 +21,20 @@
     <h1>Lista de Veículos</h1>
     <div id="filtro" class="mb-4">
         <label for="tipoVeiculo">Tipo:</label>
-        <select class="input-filtro" id="tipoVeiculo">
+        <select class="input-filtro" id="tipo">
             <option value="">Todos</option>
             <option value="CARRO">Carro</option>
             <option value="MOTO">Moto</option>
         </select>
 
-        <label for="corVeiculo">Cor:</label>
-        <input type="text" id="corVeiculo" class="input-filtro" placeholder="Cor">
+        <label for="cor">Cor:</label>
+        <input type="text" id="cor" class="input-filtro" placeholder="Cor">
 
-        <label for="anoVeiculo">Ano:</label>
-        <input type="number" id="anoVeiculo" class="input-filtro" placeholder="Ano">
+        <label for="ano">Ano:</label>
+        <input type="number" id="ano" class="input-filtro" placeholder="Ano">
 
-        <label for="modeloVeiculo">Modelo:</label>
-        <input type="text" id="modeloVeiculo" class="input-filtro" placeholder="Modelo">
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" class="input-filtro" placeholder="Modelo">
 
 
         <button onclick="aplicarFiltro()">Filtrar</button>
@@ -160,7 +160,7 @@
         <h2>Adicionar Veículo</h2>
 
         <label>Tipo</label>
-        <select id="tipo" onchange="alterarCampos()">
+        <select id="tipoVeiculo" onchange="alterarCampos()">
             <option value="">Selecione</option>
             <option value="CARRO">Carro</option>
             <option value="MOTO">Moto</option>
@@ -169,7 +169,7 @@
         <div class="grid-container">
             <div>
                 <label>Modelo</label>
-                <input type="text" id="modelo" />
+                <input type="text" id="modeloVeiculo" />
             </div>
 
             <div>
@@ -179,7 +179,7 @@
 
             <div>
                 <label>Ano</label>
-                <input type="number" id="ano" />
+                <input type="number" id="anoVeiculo" />
             </div>
 
             <div>
@@ -189,7 +189,7 @@
 
             <div>
                 <label>Cor</label>
-                <input type="text" id="cor" />
+                <input type="text" id="corVeiculo" />
             </div>
         </div>
 

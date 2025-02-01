@@ -68,22 +68,9 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #003366;
-}
-#adicionar-veiculo-btn {
-    background-color: #28a745; /* Verde */
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-left: 20px; /* Adicionando espaçamento entre os botões */
-}
-#adicionar-veiculo-btn:hover {
-    background-color: #218838; /* Verde mais escuro */
 }
 table {
     width: 100%;

@@ -251,12 +251,12 @@ function alterarCampos() {
 }
 
 async function adicionarVeiculo() {
-    const tipo = document.getElementById("tipo").value;
-    const modelo = document.getElementById("modelo").value;
+    const tipo = document.getElementById("tipoVeiculo").value;
+    const modelo = document.getElementById("modeloVeiculo").value;
     const fabricante = document.getElementById("fabricante").value;
-    const ano = parseInt(document.getElementById("ano").value);
+    const ano = parseInt(document.getElementById("anoVeiculo").value);
     const preco = parseFloat(document.getElementById("preco").value);
-    const cor = document.getElementById("cor").value;
+    const cor = document.getElementById("corVeiculo").value;
 
     let veiculo = {
         modelo,
@@ -324,6 +324,7 @@ function aplicarFiltro() {
    if (params.toString()) {
        url += "?" + params.toString();
    }
+   console.log(url)
     // Faz a requisição com os filtros aplicados
     fetch(url)
             .then(response => {
@@ -349,9 +350,9 @@ function aplicarFiltro() {
                         <td>${veiculo.fabricante}</td>
                         <td>${veiculo.ano}</td>
                         <td class="actions">
-                            <i class="fa-solid fa-eye" title="Visualizar"></i>
-                            <i class="fa-solid fa-pen" title="Editar"></i>
-                            <i class="fa-solid fa-trash" title="Deletar"></i>
+                            <i class="fa-solid fa-eye" title="Visualizar" onclick="verDetalhes(${veiculo.id})"></i>
+                            <i class="fa-solid fa-pen" title="Editar" onclick="editarVeiculo(${veiculo.id})"></i>
+                            <i class="fa-solid fa-trash" title="Deletar" onclick="deletarVeiculo(${veiculo.id})"></i>
                         </td>
                     `;
                     tabela.appendChild(row);
