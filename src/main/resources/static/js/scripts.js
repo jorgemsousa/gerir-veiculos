@@ -312,7 +312,6 @@ function aplicarFiltro() {
    const cor = document.getElementById("cor").value;
    const ano = document.getElementById("ano").value;
    const modelo = document.getElementById("modelo").value;
-   const fabricante = document.getElementById("fabricante").value;
 
    let params = new URLSearchParams();
 
@@ -320,7 +319,6 @@ function aplicarFiltro() {
    if (cor) params.append("cor", cor);
    if (ano) params.append("ano", ano);
    if (modelo) params.append("modelo", modelo);
-   if (fabricante) params.append("fabricante", fabricante);
 
    let url = "/api/veiculos/filtro";
    if (params.toString()) {
