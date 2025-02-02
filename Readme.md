@@ -212,5 +212,6 @@ O Front estará rodando em `http://localhost:8080/index.html` 🚀
 
 Essa API permite **gerenciar veículos**, diferenciando entre **carros e motos**, utilizando **JDBC com consultas nativas ao PostgreSQL**. Ideal para sistemas de controle de frotas, lojas de veículos, entre outros! 🚗🏍️
 
-É primordial que utilizamos letras em caixa nos objetos passados apenas nos campos Tipo\_Combustivel e Tipo conforme exemplos acima, pois, criamos ENUM no java que por padrão utilizamos caixa alta no conjunto. 
-Para que o tailwind css funcione corretamente é preciso está conectado a internet\
+É primordial que utilizamos letras em caixa nos objetos passados apenas nos campos Tipo_Combustivel e Tipo conforme exemplos acima, pois, criamos ENUM no java que por padrão utilizamos caixa alta no conjunto. 
+
+
