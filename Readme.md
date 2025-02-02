@@ -187,6 +187,16 @@ CREATE DATABASE veiculos_db;
 
 ### 2️⃣ Configurar a Conexão com o Banco
 
+No arquivo '.env', defina:
+
+```java
+DB_HOST=`host`
+DB_PORT=`porta`
+DB_NAME=`nome`
+DB_USER=`usuario`
+DB_PASSWORD=`senha`
+```
+
 No arquivo `DatabaseConfig.java`, defina:
 
 ```java
@@ -203,7 +213,7 @@ mvn spring-boot:run
 
 A API estará rodando em `http://localhost:8080/api/veiculos` 🚀
 
-### 4️⃣ Eecutar o Front
+### 4️⃣ Executar o Front
 O Front estará rodando em `http://localhost:8080/index.html` 🚀
 
 ---
