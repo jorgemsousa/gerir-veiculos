@@ -98,8 +98,8 @@ th {
 }
 
 .actions i:hover {
-    color: #004080; /* Cor ao passar o mouse */
-    transform: scale(1.2); /* Aumenta o tamanho do ícone */
+    color: #004080;
+    transform: scale(1.2);
 }
 
 .actions i.fa-trash {

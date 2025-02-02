@@ -42,14 +42,12 @@ async function verDetalhes(id) {
     let detalhesAdicionais = '';
 
     if (veiculo.tipo.toLowerCase() === "carro") {
-        // Ajuste para usar os nomes corretos dos campos
         detalhesAdicionais = `
             <p><strong>Tipo de Combustível:</strong> ${veiculo.tipoCombustivel || 'Não informado'}</p>
             <p><strong>Quantidade de Portas:</strong> ${veiculo.quantidadePortas || 'Não informado'}</p>
         `;
     }
     else if (veiculo.tipo.toLowerCase() === "moto") {
-        // Cilindrada já está correto
         detalhesAdicionais = `
             <p><strong>Cilindrada:</strong> ${veiculo.cilindrada || 'Não informado'}</p>
         `;
@@ -60,7 +58,7 @@ async function verDetalhes(id) {
         <p><strong>Modelo:</strong> ${veiculo.modelo}</p>
         <p><strong>Fabricante:</strong> ${veiculo.fabricante}</p>
         <p><strong>Ano:</strong> ${veiculo.ano}</p>
-        <p><strong>Preço:</strong> ${veiculo.preco}</p>
+        <p><strong>Preço:</strong> ${formatarPreco(veiculo.preco)}</p>
         <p><strong>Cor:</strong> ${veiculo.cor}</p>
         <p><strong>Tipo:</strong> ${veiculo.tipo}</p>
         ${detalhesAdicionais}
@@ -89,7 +87,7 @@ async function editarVeiculo(id) {
         document.getElementById('editar-modelo').value = veiculo.modelo;
         document.getElementById('editar-fabricante').value = veiculo.fabricante;
         document.getElementById('editar-ano').value = veiculo.ano;
-        document.getElementById('editar-preco').value = veiculo.preco;
+        document.getElementById('editar-preco').value = veiculo.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         document.getElementById('editar-cor').value = veiculo.cor;
         document.getElementById('editar-tipo').value = veiculo.tipo;
 
@@ -139,9 +137,8 @@ async function salvarEdicao() {
         });
         if (!response.ok) throw new Error("Erro ao atualizar veículo.");
 
-        alert(responseData.message || "Veículo atualizado com sucesso!");
-        fecharModal();
-        buscarTodosVeiculos();
+        alert("Veículo atualizado com sucesso!");
+        fecharModalEditar();
     } catch (error) {
         alert(error.message);
     }
@@ -393,4 +390,11 @@ function listaVeiculos() {
 function fecharModalEditar() {
     const modal = document.getElementById('modal-editar');
     modal.classList.remove('active');
+}
+
+function formatarPreco(preco) {
+  if (!preco) return 'Preço não informado';
+
+  const numero = parseFloat(preco.toString().replace(/[^0-9,.-]+/g, '').replace(',', '.'));
+  return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }

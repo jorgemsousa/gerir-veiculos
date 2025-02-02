@@ -210,6 +210,7 @@ public class VeiculoRepository {
                 }
             }
         } catch (Exception e) {
+            System.out.println("Erro ao atualizar: " + e);
             e.printStackTrace();
         }
         return false;
