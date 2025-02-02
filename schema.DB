@@ -1,0 +1,42 @@
+
+Criando a tabela principal veiculos
+CREATE TABLE veiculos (
+    id SERIAL PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    fabricante VARCHAR(100) NOT NULL,
+    ano INT NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    cor VARCHAR(50) NOT NULL,
+    tipo VARCHAR(10) CHECK (tipo IN ('carro', 'moto')) NOT NULL
+);
+
+Criando a tabela carros para atributos exclusivos de carros
+CREATE TABLE carros (
+    id INT PRIMARY KEY REFERENCES veiculos(id) ON DELETE CASCADE,
+    quantidade_portas INT NOT NULL CHECK (quantidade_portas BETWEEN 2 AND 5),
+    tipo_combustivel VARCHAR(10) CHECK (tipo_combustivel IN ('gasolina', 'etanol', 'diesel', 'flex')) NOT NULL
+);
+
+Criando a tabela motos para atributos exclusivos de motos
+CREATE TABLE motos (
+    id INT PRIMARY KEY REFERENCES veiculos(id) ON DELETE CASCADE,
+    cilindrada INT NOT NULL CHECK (cilindrada > 0)
+);
+
+Inserindo um carro
+INSERT INTO veiculos (modelo, fabricante, ano, preco, cor, tipo)
+VALUES ('Civic', 'Honda', 2022, 120000, 'Preto', 'carro')
+RETURNING id;  -- Retorna o ID gerado automaticamente
+Agora, vincule esse veículo à tabela carros (suponha que o ID retornado foi 1):
+INSERT INTO carros (id, quantidade_portas, tipo_combustivel)
+VALUES (1, 4, 'flex');
+
+
+ Inserindo uma moto
+ INSERT INTO veiculos (modelo, fabricante, ano, preco, cor, tipo)
+ VALUES ('CB 500', 'Honda', 2023, 35000, 'Vermelho', 'moto')
+ RETURNING id;
+
+Agora, vinculamos à tabela motos (suponha que o ID retornado foi 2):
+INSERT INTO motos (id, cilindrada)
+VALUES (2, 500);
