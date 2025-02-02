@@ -212,6 +212,9 @@ O Front estará rodando em `http://localhost:8080/index.html` 🚀
 
 Essa API permite **gerenciar veículos**, diferenciando entre **carros e motos**, utilizando **JDBC com consultas nativas ao PostgreSQL**. Ideal para sistemas de controle de frotas, lojas de veículos, entre outros! 🚗🏍️
 
-É primordial que utilizamos letras em caixa nos objetos passados apenas nos campos Tipo_Combustivel e Tipo conforme exemplos acima, pois, criamos ENUM no java que por padrão utilizamos caixa alta no conjunto. 
+É primordial que utilizamos letras em caixa nos objetos passados apenas nos campos Tipo_Combustivel e Tipo conforme exemplos acima, pois, criamos ENUM no java que por padrão utilizamos caixa alta no conjunto.
 
+---
+
+Na raiz do projeto é preciso adicionar um arquivo ".env", em resources->application.properties existe um exempo do mesmo.
 
