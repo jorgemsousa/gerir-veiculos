@@ -84,8 +84,8 @@ async function editarVeiculo(id) {
         document.getElementById('editar-id').value = veiculo.id;
         document.getElementById('editar-modelo').value = veiculo.modelo;
         document.getElementById('editar-fabricante').value = veiculo.fabricante;
-        document.getElementById('editar-ano').value = veiculo.ano;
-        document.getElementById('editar-preco').value = veiculo.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('editar-ano').value = formatarPreco(veiculo.ano);
+        document.getElementById('editar-preco').value = veiculo.preco;
         document.getElementById('editar-cor').value = veiculo.cor;
         document.getElementById('editar-tipo').value = veiculo.tipo;
 
