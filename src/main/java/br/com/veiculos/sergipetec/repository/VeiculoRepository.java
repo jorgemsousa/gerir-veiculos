@@ -50,7 +50,7 @@ public class VeiculoRepository {
     // metodos para adicionar veiculo
     public boolean addVeiculo(Veiculo veiculo) {
         String sqlVeiculo = "INSERT INTO veiculos (modelo, fabricante, ano, preco, cor, tipo) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
-
+        System.out.println(veiculo);
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmtVeiculo = conn.prepareStatement(sqlVeiculo)) {
 
@@ -314,7 +314,7 @@ public class VeiculoRepository {
 
     private boolean addCarro(int id, Veiculo veiculo) {
         String sqlCarro = "INSERT INTO carros (id, quantidade_portas, tipo_combustivel) VALUES (?, ?, ?)";
-
+        System.out.println(veiculo);
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmtCarro = conn.prepareStatement(sqlCarro)) {
 

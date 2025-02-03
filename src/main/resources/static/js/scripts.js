@@ -64,11 +64,9 @@ async function verDetalhes(id) {
         ${detalhesAdicionais}
     `;
 
-    // Mostra o modal ao adicionar a classe 'active'
     modalDetalhes.classList.add('active');
 }
 
-// Função para fechar o modal
 function fecharModalDetalhes() {
     const modalDetalhes = document.getElementById('modal-detalhes');
     modalDetalhes.classList.remove('active');
@@ -102,7 +100,6 @@ async function editarVeiculo(id) {
             document.getElementById('editar-cilindrada').value = veiculo.cilindrada || "";
         }
 
-        // Adicionando a classe show para exibir o modal
         const modal = document.getElementById('modal-editar');
         modal.classList.add('active');
 
@@ -139,6 +136,7 @@ async function salvarEdicao() {
 
         alert("Veículo atualizado com sucesso!");
         fecharModalEditar();
+        listaVeiculos
     } catch (error) {
         alert(error.message);
     }
@@ -209,14 +207,12 @@ async function buscarPorFiltro() {
 }
 
 function alterarCampos() {
-    const tipo = document.getElementById("tipo").value;
+    const tipo = document.getElementById("tipo-veiculo").value;
     const camposDinamicos = document.getElementById("campos-dinamicos");
 
-    // Limpa os campos dinâmicos antes de adicionar novos
     camposDinamicos.innerHTML = "";
 
     if (tipo.toUpperCase() === "CARRO") {
-        // Campo para quantidade de portas
         let quantidadePortasField = document.createElement("div");
         quantidadePortasField.innerHTML = `
             <label class="block mt-2">Quantidade de Portas</label>
@@ -224,20 +220,18 @@ function alterarCampos() {
         `;
         camposDinamicos.appendChild(quantidadePortasField);
 
-        // Campo para tipo de combustível
         let tipoCombustivelField = document.createElement("div");
         tipoCombustivelField.innerHTML = `
             <label class="block mt-2">Tipo de Combustível</label>
             <select id="tipoCombustivel" class="border p-2 w-full">
-                <option value="gasolina">Gasolina</option>
-                <option value="etanol">Etanol</option>
-                <option value="diesel">Diesel</option>
-                <option value="flex">Flex</option>
+                <option value="GASOLINA">Gasolina</option>
+                <option value="ETANOL">Etanol</option>
+                <option value="DIESEL">Diesel</option>
+                <option value="FLEX">Flex</option>
             </select>
         `;
         camposDinamicos.appendChild(tipoCombustivelField);
     } else if (tipo.toUpperCase() === "MOTO") {
-        // Campo para cilindrada se for moto
         let cilindradaField = document.createElement("div");
         cilindradaField.innerHTML = `
             <label class="block mt-2">Cilindrada</label>
@@ -248,7 +242,7 @@ function alterarCampos() {
 }
 
 async function adicionarVeiculo() {
-    const tipo = document.getElementById("tipoVeiculo").value;
+    const tipo = document.getElementById("tipo-veiculo").value;
     const modelo = document.getElementById("modeloVeiculo").value;
     const fabricante = document.getElementById("fabricante").value;
     const ano = parseInt(document.getElementById("anoVeiculo").value);
@@ -264,13 +258,11 @@ async function adicionarVeiculo() {
         tipo
     };
 
-    // Verifica se o tipo de veículo é CARRO e coleta os dados adicionais
     if (tipo.toUpperCase() === "CARRO") {
         veiculo.quantidadePortas = parseInt(document.getElementById("quantidadePortas").value);
-        veiculo.tipoCombustivel = document.getElementById("tipoCombustivel").value; // Adiciona o tipo de combustível
+        veiculo.tipoCombustivel = document.getElementById("tipoCombustivel").value.toUpperCase();
     }
-    // Verifica se o tipo de veículo é MOTO e coleta a cilindrada
-    else if (tipo.toUpperCase() === "MOTO") {
+    else if (tipo.toUpperCase === "MOTO") {
         veiculo.cilindrada = parseInt(document.getElementById("cilindrada").value);
     }
 
@@ -287,7 +279,7 @@ async function adicionarVeiculo() {
 
         alert('Veículo adicionado com sucesso!');
         fecharModalVeiculo();
-        buscarTodosVeiculos();
+        listaVeiculos();
     } catch (error) {
         alert(error.message);
     }
@@ -303,7 +295,6 @@ function fecharModalVeiculo() {
         modal.classList.remove('active');
 }
 
-// Função para aplicar o filtro e carregar os veículos filtrados
 function aplicarFiltro() {
    const tipo = document.getElementById("tipo").value;
    const cor = document.getElementById("cor").value;
@@ -361,12 +352,12 @@ function aplicarFiltro() {
             });
 }
 
-// Função para carregar todos os veículos inicialmente
 function listaVeiculos() {
     fetch("/api/veiculos")
         .then(response => response.json())
         .then(data => {
             const tabela = document.getElementById("tabela-veiculos");
+            tabela.innerHTML = "";
             data.forEach(veiculo => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -386,7 +377,6 @@ function listaVeiculos() {
         .catch(error => console.error("Erro ao carregar veículos:", error));
 }
 
-// Função para fechar o modal
 function fecharModalEditar() {
     const modal = document.getElementById('modal-editar');
     modal.classList.remove('active');
